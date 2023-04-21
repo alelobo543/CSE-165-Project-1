@@ -24,7 +24,7 @@ public class RayCast : MonoBehaviour
     void FixedUpdate()
     {
           
-       actual.enabled = true;
+        actual.enabled = true;
         actual.SetPosition(0, transform.position);
         actual.SetPosition(1, transform.TransformDirection(Vector3.forward) * 500);
         int layerMask = 1;
