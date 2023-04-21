@@ -17,12 +17,12 @@ public class SpawnObject : MonoBehaviour
     {
         Vector3  spawnLocation = transform.TransformDirection(Vector3.forward);
         spawnLocation.y = 0.5f;
-        if (OVRInput.Get(OVRInput.Button.One) || Input.GetKeyDown(KeyCode.Space))
+        if (OVRInput.GetDown(OVRInput.RawButton.X) || Input.GetKeyDown(KeyCode.Space))
         {
 
             Instantiate(chair, transform.position + spawnLocation , chair.transform.rotation);
         }
-        if (OVRInput.Get(OVRInput.Button.Two) || Input.GetKeyDown(KeyCode.A))
+        if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A))
         {
 
             Instantiate(desk, transform.position + spawnLocation, desk.transform.rotation);

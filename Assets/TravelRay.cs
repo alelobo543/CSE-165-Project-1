@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RayCast : MonoBehaviour
+public class TravelRay : MonoBehaviour
 {
     // Start is called before the first frame update
     float startime = 0;
@@ -23,21 +23,25 @@ public class RayCast : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-          
+
         actual.enabled = true;
         actual.SetPosition(0, transform.position);
         actual.SetPosition(1, transform.TransformDirection(Vector3.forward) * 500);
         int layerMask = 1;
-        
+
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             Debug.Log("Did Hit");
-            actual.material.SetColor("_Color",Color.cyan);
+            actual.material.SetColor("_Color", Color.cyan);
             actual.SetPosition(1, transform.position + (transform.TransformDirection(Vector3.forward) * hit.distance));
-
+            if (OVRInput.GetDown(OVRInput.RawButton.A))
+            {
+                GameObject.Find("OVRCameraRig").transform.position = hit.point;
+                GameObject.Find("OVRCameraRig").transform.Translate(new Vector3(0, 0.5f, 0), Space.World);
+            }
         }
         else
         {
