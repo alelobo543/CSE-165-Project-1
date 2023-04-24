@@ -34,10 +34,9 @@ public class TravelRay : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Did Hit");
-            actual.material.SetColor("_Color", Color.cyan);
+            
             actual.SetPosition(1, transform.position + (transform.TransformDirection(Vector3.forward) * hit.distance));
-            if (OVRInput.GetDown(OVRInput.RawButton.A))
+            if (OVRInput.GetDown(OVRInput.RawButton.A) && hit.collider.gameObject.name=="Plane")
             {
                 GameObject.Find("OVRCameraRig").transform.position = hit.point;
                 GameObject.Find("OVRCameraRig").transform.Translate(new Vector3(0, 0.5f, 0), Space.World);
@@ -46,7 +45,7 @@ public class TravelRay : MonoBehaviour
         else
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-            Debug.Log("Did not Hit");
+            
             startime = 0;
             collide = null;
 
