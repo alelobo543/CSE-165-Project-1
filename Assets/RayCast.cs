@@ -33,10 +33,11 @@ public class RayCast : MonoBehaviour
 
             held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
             Debug.Log(held.name);
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
             {
 
                 item = false;
+                held.GetComponent<Rigidbody>().isKinematic = false;
                 held = null;
                 
 
@@ -63,14 +64,25 @@ public class RayCast : MonoBehaviour
 
                     actual.startColor = Color.cyan;
                     actual.endColor = Color.cyan;
-
+                    GameObject temp = hit.collider.gameObject;
+                    Debug.Log(temp.name);
+                    while(temp.name!="chair_1(Clone)"&& temp.name != "desk_1(Clone)")
+                    {
+                        temp = temp.transform.parent.gameObject;
+                        Debug.Log(temp.name);
+                    }
                     if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
                     {
                         
-                        held = hit.collider.gameObject;
+                        held = temp;
+                        held.GetComponent<Rigidbody>().isKinematic = true;
                        
                         held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-                        distance = (hit.distance*1.5f);
+                        distance = (hit.distance);
+                        if(distance < 1)
+                        {
+                            distance = 1;
+                        }
                         item = true;
                         actual.enabled = false;
 
