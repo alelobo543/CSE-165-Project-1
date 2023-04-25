@@ -27,6 +27,9 @@ public class RayCast : MonoBehaviour
     {
         if (item)
         {
+
+            held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
+            Debug.Log(held.name);
             if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
             {
 
@@ -36,29 +39,6 @@ public class RayCast : MonoBehaviour
 
 
             }
-        }
-        else if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
-        {
-
-
-            held.GetComponent<Rigidbody>().isKinematic = true;
-
-            held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-
-            item = true;
-            actual.enabled = false;
-
-        }
-    }
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-
-        if (item)
-        {
-
-            held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
-            Debug.Log(held.name);
         }
         else
         {
@@ -74,7 +54,7 @@ public class RayCast : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
             {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                
+
                 actual.SetPosition(1, transform.position + (transform.TransformDirection(Vector3.forward) * hit.distance));
                 if (hit.collider.gameObject.layer == 3)
                 {
@@ -83,16 +63,31 @@ public class RayCast : MonoBehaviour
                     actual.endColor = Color.cyan;
                     GameObject temp = hit.collider.gameObject;
                     Debug.Log(temp.name);
-                    while(temp.name!="chair_1(Clone)"&& temp.name != "desk_1(Clone)")
+                    while (temp.name != "chair_1(Clone)" && temp.name != "desk_1(Clone)")
                     {
                         temp = temp.transform.parent.gameObject;
                         Debug.Log(temp.name);
                     }
                     held = temp;
+                    temp = null;
                     distance = (hit.distance);
                     if (distance < 1)
                     {
                         distance = 1;
+                    }
+                    if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+                    {
+
+                        if (held != null)
+                        {
+                            held.GetComponent<Rigidbody>().isKinematic = true;
+
+                            held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+
+                            item = true;
+                            actual.enabled = false;
+                        }
+
                     }
 
 
@@ -102,7 +97,7 @@ public class RayCast : MonoBehaviour
             else
             {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-                
+
                 startime = 0;
                 collide = null;
 
@@ -110,4 +105,5 @@ public class RayCast : MonoBehaviour
         }
     }
 }
+
 
