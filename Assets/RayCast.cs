@@ -23,7 +23,33 @@ public class RayCast : MonoBehaviour
         positions[1] = new Vector3(0.0f, 2.0f, 0.0f);
         actual.SetPositions(positions);
     }
+    private void Update()
+    {
+        if (item)
+        {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            {
 
+                item = false;
+                held.GetComponent<Rigidbody>().isKinematic = false;
+                held = null;
+
+
+            }
+        }
+        else if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+        {
+
+
+            held.GetComponent<Rigidbody>().isKinematic = true;
+
+            held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+
+            item = true;
+            actual.enabled = false;
+
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -33,15 +59,6 @@ public class RayCast : MonoBehaviour
 
             held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
             Debug.Log(held.name);
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
-            {
-
-                item = false;
-                held.GetComponent<Rigidbody>().isKinematic = false;
-                held = null;
-                
-
-            }
         }
         else
         {
@@ -71,22 +88,13 @@ public class RayCast : MonoBehaviour
                         temp = temp.transform.parent.gameObject;
                         Debug.Log(temp.name);
                     }
-                    if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+                    held = temp;
+                    distance = (hit.distance);
+                    if (distance < 1)
                     {
-                        
-                        held = temp;
-                        held.GetComponent<Rigidbody>().isKinematic = true;
-                       
-                        held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-                        distance = (hit.distance);
-                        if(distance < 1)
-                        {
-                            distance = 1;
-                        }
-                        item = true;
-                        actual.enabled = false;
-
+                        distance = 1;
                     }
+
 
                 }
 

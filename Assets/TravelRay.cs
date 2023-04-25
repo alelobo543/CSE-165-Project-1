@@ -11,6 +11,8 @@ public class TravelRay : MonoBehaviour
     GameObject camera;
     public LineRenderer line;
     LineRenderer actual;
+    Vector3 point;
+    RaycastHit currhit;
     void Start()
     {
         actual = Instantiate(line);
@@ -19,7 +21,14 @@ public class TravelRay : MonoBehaviour
         positions[1] = new Vector3(0.0f, 2.0f, 0.0f);
         actual.SetPositions(positions);
     }
-
+    private void Update()
+    {
+        if (OVRInput.GetDown(OVRInput.RawButton.A) && currhit.collider.gameObject.name == "Plane")
+        {
+            GameObject.Find("OVRCameraRig").transform.position = currhit.point;
+            GameObject.Find("OVRCameraRig").transform.Translate(new Vector3(0, 0.5f, 0), Space.World);
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -36,11 +45,8 @@ public class TravelRay : MonoBehaviour
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             
             actual.SetPosition(1, transform.position + (transform.TransformDirection(Vector3.forward) * hit.distance));
-            if (OVRInput.GetDown(OVRInput.RawButton.A) && hit.collider.gameObject.name=="Plane")
-            {
-                GameObject.Find("OVRCameraRig").transform.position = hit.point;
-                GameObject.Find("OVRCameraRig").transform.Translate(new Vector3(0, 0.5f, 0), Space.World);
-            }
+            currhit = hit;
+
         }
         else
         {
