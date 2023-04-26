@@ -11,6 +11,8 @@ public class RayCast : MonoBehaviour
     GameObject held;
     float distance;
     bool item;
+    bool rotate;
+    Vector3 starthand;
     public LineRenderer line;
 
     LineRenderer actual;
@@ -27,21 +29,52 @@ public class RayCast : MonoBehaviour
     {
         if (item)
         {
-
-            held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
+            if (!rotate)
+            {
+                held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
+            }
             Debug.Log(held.name);
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            if (rotate)
             {
 
+                Vector3 dist = (transform.position - starthand);
+                Debug.Log(dist);
+                if (Vector3.Dot(held.transform.up, Vector3.up) >= 0)
+                {
+                    held.transform.Rotate(held.transform.up*3f, -Vector3.Dot(dist, transform.right)*3f, Space.World);
+                }
+                else
+                {
+                    held.transform.Rotate(held.transform.up*3f, Vector3.Dot(dist, transform.right)*3f, Space.World);
+                }
+                held.transform.Rotate(transform.right*3f, Vector3.Dot(dist, transform.up) * 3f, Space.World);
+                if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.L))
+                {
+                    rotate = false;
+                }
+            }
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            {
+                rotate = false;
                 item = false;
                 held.GetComponent<Rigidbody>().isKinematic = false;
                 held = null;
 
 
             }
+            else if (!rotate&&(OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.M)))
+            {
+
+                rotate = true;
+                starthand = transform.position;
+
+
+
+            }
         }
         else
         {
+            rotate = false;
             actual.startColor = Color.red;
             actual.endColor = Color.red;
             actual.enabled = true;
