@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RayCast : MonoBehaviour
 {
@@ -14,6 +15,15 @@ public class RayCast : MonoBehaviour
     bool rotate;
     Vector3 starthand;
     public LineRenderer line;
+    public GameObject panel;
+    public Image img;
+    public Button btn;
+    public GameObject chair;
+    public GameObject tv;
+    public GameObject desk;
+    public GameObject whiteboard;
+    public GameObject cabinet;
+    public GameObject locker;
 
     LineRenderer actual;
     void Start()
@@ -24,6 +34,7 @@ public class RayCast : MonoBehaviour
         positions[0] = new Vector3(-2.0f, -2.0f, 0.0f);
         positions[1] = new Vector3(0.0f, 2.0f, 0.0f);
         actual.SetPositions(positions);
+        img = panel.GetComponent<Image>();
     }
     private void Update()
     {
@@ -86,8 +97,46 @@ public class RayCast : MonoBehaviour
             // Does the ray intersect any objects excluding the player layer
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
 
+                //for menu
+                if(hit.collider.gameObject.layer == 5)
+                {
+                    Vector3 spawnLocation = transform.TransformDirection(Vector3.forward);
+                    spawnLocation.y = 0.5f;
+                    btn = hit.collider.gameObject.GetComponent<Button>();
+                    if(btn != null)
+                    {
+                        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+                        {
+                            if(btn.name == "chair_btn")
+                            {
+                                Instantiate(chair, transform.position + spawnLocation, chair.transform.rotation);
+                            }
+                            else if(btn.name == "tv_btn")
+                            {
+                                Instantiate(tv, transform.position + spawnLocation, tv.transform.rotation);
+                            }
+                            else if (btn.name == "desk_btn")
+                            {
+                                Instantiate(desk, transform.position + spawnLocation, desk.transform.rotation);
+                            }
+                            else if (btn.name == "cabinet_btn")
+                            {
+                                Instantiate(cabinet, transform.position + spawnLocation, cabinet.transform.rotation);
+                            }
+                            else if (btn.name == "locker_btn")
+                            {
+                                Instantiate(locker, transform.position + spawnLocation, locker.transform.rotation);
+                            }
+                            else if (btn.name == "whiteboard_btn")
+                            {
+                                Instantiate(whiteboard, transform.position + spawnLocation, whiteboard.transform.rotation);
+                            }
+                        }
+                    }
+                }
+
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 actual.SetPosition(1, transform.position + (transform.TransformDirection(Vector3.forward) * hit.distance));
                 if (hit.collider.gameObject.layer == 3)
                 {
