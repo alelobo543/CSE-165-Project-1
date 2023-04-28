@@ -14,6 +14,7 @@ public class RayCast : MonoBehaviour
     float distance;
     bool item;
     bool rotate;
+    bool scale;
     Vector3 starthand;
     public LineRenderer line;
     public GameObject panel;
@@ -27,6 +28,8 @@ public class RayCast : MonoBehaviour
     public GameObject locker;
     public GameObject selector;
     GameObject spehere_selector;
+    float startDist;
+    Vector3 startScale;
     public void Select()
     {
         distance = 1;
@@ -43,6 +46,8 @@ public class RayCast : MonoBehaviour
     void Start()
     {
         item = false;
+        rotate = false;
+        scale = false;
         actual = Instantiate(line);
         Vector3[] positions = new Vector3[2];
         positions[0] = new Vector3(-2.0f, -2.0f, 0.0f);
@@ -57,21 +62,52 @@ public class RayCast : MonoBehaviour
     }
     private void Update()
     {
-
-        if(Input.GetKeyDown(KeyCode.Z))
+        if (OVRInput.GetDown(OVRInput.RawButton.X) || Input.GetKeyDown(KeyCode.I))
         {
-            selectorMode = !selectorMode;
-            Debug.Log(selectorMode);
+            
+            if (GameObject.Find("Spawn Menu")!=null)
+            {
+                GameObject.Find("Spawn Menu").SetActive(false);
+            }
+            else
+            {
+                Debug.Log(GameObject.Find("Spawn Menu").active);
+                GameObject.Find("Spawn Menu").SetActive(true);
+            }
+
         }
 
         if (item)
         {
-            if (!rotate)
+            if (!rotate&&!scale)
             {
                 held.transform.position = transform.position + transform.TransformDirection(Vector3.forward) * distance;
             }
             Debug.Log(held.name);
-            if (rotate)
+            if (scale)
+            {
+                float dist = (transform.position - GameObject.Find("RightHandAnchor").transform.position).magnitude;
+                if (dist == 0)
+                {
+                    dist = 0.0001f;
+                }
+                float ratio = dist / startDist;
+
+                if (ratio < 0.2f)
+                {
+                    ratio = 0.25f;
+                }
+                if (ratio > 4f)
+                {
+                    ratio = 4;
+                }
+                held.transform.localScale = startScale * (dist / startDist);
+                if (OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger) || Input.GetKeyDown(KeyCode.L))
+                {
+                    scale = false;
+                }
+            }
+            else if (rotate)
             {
 
                 Vector3 dist = (transform.position - starthand);
@@ -85,12 +121,12 @@ public class RayCast : MonoBehaviour
                     held.transform.Rotate(held.transform.up*3f, Vector3.Dot(dist, transform.right)*3f, Space.World);
                 }
                 held.transform.Rotate(transform.right*3f, Vector3.Dot(dist, transform.up) * 3f, Space.World);
-                if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.L))
+                if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.L))
                 {
                     rotate = false;
                 }
             }
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.S))
             {
                 Light[] children = held.GetComponentsInChildren<Light>();
                 foreach (Light l in children)
@@ -99,12 +135,13 @@ public class RayCast : MonoBehaviour
                 }
                 rotate = false;
                 item = false;
+                scale = false;
                 held.GetComponent<Rigidbody>().isKinematic = false;
                 held = null;
 
 
             }
-            else if (!rotate&&(OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.M)))
+            else if (!scale&&!rotate&&(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.M)))
             {
 
                 rotate = true;
@@ -113,8 +150,18 @@ public class RayCast : MonoBehaviour
 
 
             }
+            else if (!scale && !rotate && (OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger) || Input.GetKeyDown(KeyCode.P)))
+            {
+                scale = true;
+                startDist = (transform.position - GameObject.Find("RightHandAnchor").transform.position).magnitude;
+                if (startDist == 0)
+                {
+                    startDist = 0.0001f;
+                }
+                startScale = held.transform.localScale;
+            }
         }
-        else if(selectorMode == false)
+        else
         {
             rotate = false;
             actual.startColor = Color.red;
@@ -137,7 +184,7 @@ public class RayCast : MonoBehaviour
                     btn = hit.collider.gameObject.GetComponent<Button>();
                     if(btn != null)
                     {
-                        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+                        if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.S))
                         {
                             if(btn.name == "chair_btn")
                             {
@@ -194,7 +241,7 @@ public class RayCast : MonoBehaviour
                     {
                         distance = 1;
                     }
-                    if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+                    if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || Input.GetKeyDown(KeyCode.S))
                     {
 
                         if (held != null)
@@ -227,16 +274,13 @@ public class RayCast : MonoBehaviour
 
             }
         }
-        else if (selectorMode == true)
-        {
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            if (item == false && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.Z))
             {
                 Debug.Log("HELLO");
                 spehere_selector = Instantiate(selector, transform.position, selector.transform.rotation);
-                spehere_selector.transform.parent = gameObject.transform;
-                spehere_selector.GetComponent<Rigidbody>().AddForce(transform.forward * 500);
+               // spehere_selector.transform.parent = gameObject.transform;
+                spehere_selector.GetComponent<Rigidbody>().AddForce(transform.forward * 1500);
             }
-        }
     }
 }
 

@@ -29,7 +29,7 @@ public class onCollision : MonoBehaviour
                 temp = temp.transform.parent.gameObject;
                 Debug.Log(temp.name);
             }
-            transform.parent.GetComponent<RayCast>().SelectorCollision(this, temp);
+            GameObject.Find("LeftHandAnchor").transform.GetComponent<RayCast>().SelectorCollision(this, temp);
             Destroy(gameObject);
         }
         else
