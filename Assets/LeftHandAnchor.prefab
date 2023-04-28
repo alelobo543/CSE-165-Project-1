@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1248284190309345280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1244561283717229184}
+  m_Layer: 0
+  m_Name: LeftControllerAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1244561283717229184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248284190309345280}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1249115618222705706}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1249115618222308740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1249115618222705706}
+  - component: {fileID: 1249115618516586108}
+  m_Layer: 0
+  m_Name: LeftHandAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1249115618222705706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249115618222308740}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1244561283717229184}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1249115618516586108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249115618222308740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e69bab9f034dc48b32e591f52dcfa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  held: {fileID: 0}
+  line: {fileID: 792640720240375630, guid: 66ec5dab59ded5c4abba222135fdf80f, type: 3}
+  panel: {fileID: 8940355575863768149, guid: 8ef5262422753144885a8cbac1682bdc, type: 3}
+  img: {fileID: 0}
+  btn: {fileID: 0}
+  chair: {fileID: 6187054712227821771, guid: 8f0bb1e1b4ceadd488f195325813e4cc, type: 3}
+  tv: {fileID: 831704107525477079, guid: 5fc4ea7fe6bcd2a439f16a19876e65ad, type: 3}
+  desk: {fileID: 7780969271287658535, guid: bc636d75024c16644995ed3c06105727, type: 3}
+  whiteboard: {fileID: 5177071038296997642, guid: 77d34218b1d50ec4687fd338e8c82ad3, type: 3}
+  cabinet: {fileID: 5165368916412170545, guid: 54d047bc38efb95448654b9a1e9dd05e, type: 3}
+  locker: {fileID: 6767838417111501585, guid: aa9e62a94211dbd479612593f5627ea4, type: 3}
+  selector: {fileID: 5596490255830203497, guid: dcd2a0c17c7ee7a4c9190e1001afe3fc, type: 3}

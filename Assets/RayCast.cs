@@ -9,7 +9,8 @@ public class RayCast : MonoBehaviour
     float startime = 0;
     float maxtime = 1.3f;
     Collider collide = null;
-    GameObject held;
+    bool selectorMode = true;
+    public GameObject held;
     float distance;
     bool item;
     bool rotate;
@@ -24,8 +25,9 @@ public class RayCast : MonoBehaviour
     public GameObject whiteboard;
     public GameObject cabinet;
     public GameObject locker;
-
-    void Select()
+    public GameObject selector;
+    GameObject spehere_selector;
+    public void Select()
     {
         distance = 1;
         held.GetComponent<Rigidbody>().isKinematic = true;
@@ -48,8 +50,20 @@ public class RayCast : MonoBehaviour
         actual.SetPositions(positions);
         img = panel.GetComponent<Image>();
     }
+    public void SelectorCollision(onCollision script, GameObject col)
+    {
+        held = col;
+        Select();
+    }
     private void Update()
     {
+
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            selectorMode = !selectorMode;
+            Debug.Log(selectorMode);
+        }
+
         if (item)
         {
             if (!rotate)
@@ -100,7 +114,7 @@ public class RayCast : MonoBehaviour
 
             }
         }
-        else
+        else if(selectorMode == false)
         {
             rotate = false;
             actual.startColor = Color.red;
@@ -211,6 +225,16 @@ public class RayCast : MonoBehaviour
                 startime = 0;
                 collide = null;
 
+            }
+        }
+        else if (selectorMode == true)
+        {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
+            {
+                Debug.Log("HELLO");
+                spehere_selector = Instantiate(selector, transform.position, selector.transform.rotation);
+                spehere_selector.transform.parent = gameObject.transform;
+                spehere_selector.GetComponent<Rigidbody>().AddForce(transform.forward * 500);
             }
         }
     }
