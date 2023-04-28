@@ -25,6 +25,18 @@ public class RayCast : MonoBehaviour
     public GameObject cabinet;
     public GameObject locker;
 
+    void Select()
+    {
+        distance = 1;
+        held.GetComponent<Rigidbody>().isKinematic = true;
+        Light[] children = held.GetComponentsInChildren<Light>();
+        foreach (Light l in children)
+        {
+            l.enabled = true;
+        }
+        item = true;
+        actual.enabled = false;
+    }
     LineRenderer actual;
     void Start()
     {
@@ -115,27 +127,33 @@ public class RayCast : MonoBehaviour
                         {
                             if(btn.name == "chair_btn")
                             {
-                                Instantiate(chair, transform.position + spawnLocation, chair.transform.rotation);
+                                held = Instantiate(chair, transform.position + spawnLocation, chair.transform.rotation);
+                                Select();
                             }
                             else if(btn.name == "tv_btn")
                             {
-                                Instantiate(tv, transform.position + spawnLocation, tv.transform.rotation);
+                                held = Instantiate(tv, transform.position + spawnLocation, tv.transform.rotation);
+                                Select();
                             }
                             else if (btn.name == "desk_btn")
                             {
-                                Instantiate(desk, transform.position + spawnLocation, desk.transform.rotation);
+                                held = Instantiate(desk, transform.position + spawnLocation, desk.transform.rotation);
+                                Select();
                             }
                             else if (btn.name == "cabinet_btn")
                             {
-                                Instantiate(cabinet, transform.position + spawnLocation, cabinet.transform.rotation);
+                                held = Instantiate(cabinet, transform.position + spawnLocation, cabinet.transform.rotation);
+                                Select();
                             }
                             else if (btn.name == "locker_btn")
                             {
-                                Instantiate(locker, transform.position + spawnLocation, locker.transform.rotation);
+                                held = Instantiate(locker, transform.position + spawnLocation, locker.transform.rotation);
+                                Select();
                             }
                             else if (btn.name == "whiteboard_btn")
                             {
-                                Instantiate(whiteboard, transform.position + spawnLocation, whiteboard.transform.rotation);
+                                held = Instantiate(whiteboard, transform.position + spawnLocation, whiteboard.transform.rotation);
+                                Select();
                             }
                         }
                     }
