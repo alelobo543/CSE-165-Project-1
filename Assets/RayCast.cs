@@ -66,6 +66,11 @@ public class RayCast : MonoBehaviour
             }
             if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(KeyCode.S))
             {
+                Light[] children = held.GetComponentsInChildren<Light>();
+                foreach (Light l in children)
+                {
+                    l.enabled = false;
+                }
                 rotate = false;
                 item = false;
                 held.GetComponent<Rigidbody>().isKinematic = false;
@@ -144,8 +149,8 @@ public class RayCast : MonoBehaviour
                     actual.startColor = Color.cyan;
                     actual.endColor = Color.cyan;
                     GameObject temp = hit.collider.gameObject;
-                    Debug.Log(temp.name);
-                    while (temp.name != "chair_1(Clone)" && temp.name != "desk_1(Clone)")
+                    Debug.Log("HERES THE NAME" + temp.name);
+                    while (temp.name != "chair_1(Clone)" && temp.name != "desk_1(Clone)" && temp.name != "tv_1(Clone)" && temp.name != "whiteboard_1(Clone)" && temp.name != "cabinet_1(Clone)" && temp.name != "locker_1(Clone)")
                     {
                         temp = temp.transform.parent.gameObject;
                         Debug.Log(temp.name);
@@ -163,8 +168,13 @@ public class RayCast : MonoBehaviour
                         if (held != null)
                         {
                             held.GetComponent<Rigidbody>().isKinematic = true;
-
-                            held.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+                            
+                            Light[] children = held.GetComponentsInChildren<Light>();
+                            foreach(Light l in children)
+                            {
+                                l.enabled = true;
+                            }
+                            //held.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
 
                             item = true;
                             actual.enabled = false;
